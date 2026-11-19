@@ -1,4 +1,5 @@
 # Andromeda
+[![DOI](https://zenodo.org/badge/1464688619.svg)](https://doi.org/10.5281/zenodo.24380973)
 
 Andromeda is an Android local-network device and service discovery tool written in Java. It scans a local subnet for hosts responding to a hardcoded TCP ports list. 
 The UI allows the user to select one of the responsive hosts and conduct a deeper port scan (SSH, HTTP, HTTPS, SMB, IPP, RDP). More features to be added. 
