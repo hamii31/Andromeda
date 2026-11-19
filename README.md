@@ -26,6 +26,7 @@ app/build/outputs/apk/debug/app-debug.apk
 
 ## How To Use
 
+0. Install Android IDE.
 1. Install apk.
 2. Open application.
 3. Connect the phone to your local Wi‑Fi.
