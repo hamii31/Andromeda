@@ -3,41 +3,75 @@
     android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
-	android:padding="16dp">
+	android:padding="20dp">
 	
-	<EditText
-	   android:id="@+id/subnetInput"
+    <TextView
 	   android:layout_width="match_parent"
 	   android:layout_height="wrap_content"
-	   android:hint="Subnet prefix, e.g. 192.168.1."
-	   android:inputType="text"
-	   android:text="192.168.1."/>
+	   android:text="Local Network Monitor"
+	   android:textSize="24sp"
+	   android:textStyle="bold"/>
+	   
+	<TextView
+	   android:layout_width="match_parent"
+	   android:layout_height="wrap_content"
+	   android:layout_marginTop="4dp"
+	   android:text="Find responsive devices"
+	   android:textSize="14sp"/>
 	   
     <Button
 	   android:id="@+id/discoverButton"
 	   android:layout_width="match_parent"
 	   android:layout_height="wrap_content"
-	   android:text="Find responsive devices"/>
+	   android:layout_marginTop="20dp"
+	   android:text="Find"/>
 	   
 	<TextView
 	   android:id="@+id/statusText"
 	   android:layout_width="match_parent"
 	   android:layout_height="wrap_content"
-	   android:paddingTop="12dp"
-	   android:text="Ready."/>
+	   android:layout_marginTop="12dp"
+	   android:gravity="center"
+	   android:text="Ready to scan"
+	   android:textSize="14sp"/>
+	   	   
+	<TextView
+	   android:layout_width="match_parent"
+	   android:layout_height="wrap_content"
+	   android:layout_marginTop="20dp"
+	   android:text="Responsive devices"
+	   android:textSize="18sp"
+	   android:textStyle="bold"/>
 	   
     <ListView
 	   android:id="@+id/deviceList"
 	   android:layout_width="match_parent"
 	   android:layout_height="0dp"
-	   android:layout_weight="1"/>
+	   android:layout_marginTop="8dp"
+	   android:layout_weight="1"
+	   android:dividerHeight="1dp"/>
+	   
+	  	   
+	<TextView
+	   android:layout_width="match_parent"
+	   android:layout_height="wrap_content"
+	   android:layout_marginTop="12dp"
+	   android:text="Port Scan Results"
+	   android:textSize="18sp"
+	   android:textStyle="bold"/>
+	   
+	<ScrollView
+	    android:layout_width="match_parent"
+		android:layout_height="180dp"
+		android:layout_marginTop="8dp">
 	
-	<TextView 
-	    android:id="@+id/resultsText"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:maxHeight="180dp"
-		android:paddingTop="12dp"
-		android:textIsSelectable="true"
-		android:textSize="14sp"/>
+	    <TextView 
+	        android:id="@+id/resultsText"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:padding="12dp"
+			android:text="Select a device to scan its common TCP ports"
+		    android:textIsSelectable="true"
+		    android:textSize="13sp"/>
+	</ScrollView>
 </LinearLayout>
