@@ -7,7 +7,6 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 	
 	private TextView resultsText;
 	private TextView statusText;
-	private EditText subnetInput;
 	private ArrayAdapter<String> deviceAdapter;
 
     @Override
@@ -30,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 		
 		resultsText = findViewById(R.id.resultsText);
 		statusText = findViewById(R.id.statusText);
-		subnetInput = findViewById(R.id.subnetInput);
 		
 		Button discoverButton = findViewById(R.id.discoverButton);
 		ListView deviceList = findViewById(R.id.deviceList);
@@ -44,29 +41,20 @@ public class MainActivity extends AppCompatActivity {
 		deviceList.setAdapter(deviceAdapter);
 		
 		discoverButton.setOnClickListener(view -> {
-			String subnetPrefix = subnetInput.getText().toString().trim();
-			
-			if(!isValidSubnetPrefix(subnetPrefix)) {
-				statusText.setText("Enter a prefix such as 192.168.1.");
-				return;
-			}
-			
 			discoverButton.setEnabled(false);
 			deviceAdapter.clear();
 			resultsText.setText("");
-			statusText.setText("Checking " + subnetPrefix + "1-254...");
+			statusText.setText("Discovering devices on local networks...");
 			
 			executor.execute(() -> {
-				List<String> hosts = LocalNetMonitor.findResponsiveHosts(subnetPrefix);
+				List<String> hosts = LocalNetMonitor.findResponsiveHostsOnLocalNetworks();
 				
 				runOnUiThread(() -> {
 					deviceAdapter.clear();
 					deviceAdapter.addAll(hosts);
 					deviceAdapter.notifyDataSetChanged();
 					
-					statusText.setText(
-					    "Found " + hosts.size() + " responsive device(s)."
-					);
+					statusText.setText("Found " + hosts.size() + " responsive device(s).");
 					
 					discoverButton.setEnabled(true);
 				});
@@ -93,14 +81,6 @@ public class MainActivity extends AppCompatActivity {
 			});
 		});
     }
-	
-	private boolean isValidSubnetPrefix(String value) {
-		return value.matches(
-		    "^(25[0-5]|2[0-4]\\d|1?\\d?\\d)\\." +
-			"(25[0-5]|2[0-4]\\d|1?\\d?\\d)\\." +
-			"(25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.$"
-		);
-	}
 	
 	@Override
 	protected void onDestroy() {
