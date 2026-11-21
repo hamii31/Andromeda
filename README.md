@@ -23,7 +23,7 @@ app/build/outputs/apk/debug/app-debug.apk
 
 ## How To Use
 
-0. Install Android IDE (if you want to build the APK yourself).
+0. Install Android IDE to build APK.
 1. Install apk.
 2. Connect the phone to your local Wi‑Fi.
 3. Tap Find.
