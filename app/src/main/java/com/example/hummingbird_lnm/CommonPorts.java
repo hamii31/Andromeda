@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class CommonPorts {
-	
+
     public static final List<ServicePort> COMMON_TCP_PORTS = Arrays.asList(
         new ServicePort(20, "FTP-data"),
         new ServicePort(21, "FTP"),
@@ -13,11 +13,11 @@ public final class CommonPorts {
         new ServicePort(25, "SMTP"),
         new ServicePort(53, "DNS"),
         new ServicePort(80, "HTTP"),
-		new ServicePort(81, "HTTP-alt"),
+        new ServicePort(81, "HTTP-alt"),
         new ServicePort(88, "Kerberos"),
         new ServicePort(110, "POP3"),
         new ServicePort(111, "RPCbind"),
-		new ServicePort(115, "SFTP (legacy)"),
+        new ServicePort(115, "SFTP (legacy)"),
         new ServicePort(135, "MS-RPC"),
         new ServicePort(139, "NetBIOS-SSN"),
         new ServicePort(143, "IMAP"),

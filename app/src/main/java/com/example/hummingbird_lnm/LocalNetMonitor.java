@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 
 public final class LocalNetMonitor {
-	
+
 	public static List<String> findResponsiveHostsOnLocalNetworks() {
 		List<String> responsiveHosts = new ArrayList<>();
 		

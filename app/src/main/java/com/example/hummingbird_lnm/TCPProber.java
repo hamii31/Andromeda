@@ -8,6 +8,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 public final class TCPProber {
+	
 	private static final int TIMEOUT_MS = 750;
 	
     public static PortState probe(String host, int port, int timeoutMs) {
@@ -32,3 +33,4 @@ public final class TCPProber {
 	}
 	
 }
+

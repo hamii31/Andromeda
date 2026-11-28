@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 
 public final class PortScanner {
+
 	private static final int MAX_WORKERS = 8;
 	
     public static final class PortResult {

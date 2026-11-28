@@ -18,6 +18,7 @@ public final class HostDiscovery {
        ExecutorService executor = Executors.newFixedThreadPool(WORKERS);
 
        int[] probePorts = {
+
               22, 80, 443, 445, 62078, // most common first
 			  53, 135, 139, 548, 554, 
 			  631, 1883, 3389, 
@@ -65,6 +66,7 @@ public final class HostDiscovery {
             }
 
 			return responsiveHosts;
+
         } finally {
             executor.shutdownNow();
         }
