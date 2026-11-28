@@ -282,7 +282,14 @@ public final class LocalNetMonitor {
                 String ip = subnetPrefix + host;
                 
 				futures.add(executor.submit(() -> {
-
+                    try {
+                        if (InetAddress.getByName(ip).isReachable(timeoutMs)) {
+                            return ip;
+                        }
+                    } catch (IOException ignored) {
+                        // ignore and fall back to tcp scan
+                    }
+                    
                     for (int port : probePorts) {
                         PortState state = probe(ip, port, timeoutMs);
                         if (state == PortState.OPEN || state == PortState.CLOSED) {
