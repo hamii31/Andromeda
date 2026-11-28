@@ -8,6 +8,8 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -183,35 +185,45 @@ public final class LocalNetMonitor {
 			this.service = service;
 		}
 	}
+    
+    public enum PortState { OPEN, CLOSED, FILTERED, UNREACHABLE }
 	
 	public static final class PortResult {
 		public final int port;
 		public final String service;
-		public final boolean open;
+		public final PortState state;
 		
-		public PortResult(int port, String service, boolean open) {
+		public PortResult(int port, String service, PortState state) {
 			this.port = port;
 			this.service = service;
-			this.open = open;
+			this.state = state;
 		}
 		
 		@Override
 		public String toString() {
-			return String.format("TCP/%d (%s): %s", port, service, open ? "open" : "closed, filtered, or unavailable");
+			return String.format("TCP/%d (%s): %s", port, service, state);
 		}
 	}
+    
+    public static PortState probe(String host, int port, int timeoutMs) {
+        try (Socket s = new Socket()) {
+            s.connect(new InetSocketAddress(host, port), timeoutMs);
+            return PortState.OPEN;
+        } catch (SocketTimeoutException e) {
+            return PortState.FILTERED;
+        } catch (ConnectException e) {
+            Throwable c = e.getCause();
+            if (c instanceof android.system.ErrnoException && ((android.system.ErrnoException) c).errno == android.system.OsConstants.ECONNREFUSED) {
+                return PortState.CLOSED; // RST: host is alive
+            }
+            return PortState.UNREACHABLE;
+        } catch (IOException e) {
+            return PortState.UNREACHABLE;
+        }
+    }
 	
-	public static boolean isTCPOpen(String host, int port, int timeoutMs) {
-		try (Socket socket = new Socket()) {
-			socket.connect(new InetSocketAddress(host, port), timeoutMs);
-			return true;
-		} catch (IOException ex) {
-			return false;
-		}
-	}
-	
-	public static boolean isTCPOpen(String host, int port) {
-		return isTCPOpen(host, port, TIMEOUT_MS);
+	public static PortState probe(String host, int port) {
+		return probe(host, port, TIMEOUT_MS);
 	}
 	
 	public static List<PortResult> scanCommonTCPPorts(String host) {
@@ -222,12 +234,12 @@ public final class LocalNetMonitor {
 			
 			for (ServicePort servicePort : COMMON_TCP_PORTS) {
 				futures.add(executor.submit(() -> {
-					boolean open = isTCPOpen(host, servicePort.port);
+					PortState state = probe(host, servicePort.port);
 					
 					return new PortResult(
 					    servicePort.port,
 						servicePort.service,
-						open
+						state
 					);
 				}));
 			}
@@ -241,7 +253,7 @@ public final class LocalNetMonitor {
 					results.add(new PortResult(
 					    -1,
 						"Scan worker error",
-						false
+						PortState.UNREACHABLE
 					));
 				}
 			}
@@ -272,8 +284,10 @@ public final class LocalNetMonitor {
 				futures.add(executor.submit(() -> {
 
                     for (int port : probePorts) {
-                        if (isTCPOpen(ip, port, timeoutMs)) return ip;
-                         
+                        PortState state = probe(ip, port, timeoutMs);
+                        if (state == PortState.OPEN || state == PortState.CLOSED) {
+                            return ip;
+                        }
 			        }
 		            
 					return null;
