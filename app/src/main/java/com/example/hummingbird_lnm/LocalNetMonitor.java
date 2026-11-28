@@ -266,15 +266,17 @@ public final class LocalNetMonitor {
 	
     public static List<String> findResponsiveHosts(String subnetPrefix) {
        final int timeoutMs = 250;
-       final int workers = 16;
+       final int workers = 32;
 
        ExecutorService executor = Executors.newFixedThreadPool(workers);
 
-       int[] probePorts = {
-              22, 53, 80, 135, 139, 443, 445,
-              548, 554, 631, 1883, 3389, 
-              5000, 5357, 7000, 8008, 8009,
-              8080, 9100, 62078};
+       int[] probePorts = { 
+              22, 80, 443, 445, 62078, 
+              53, 135, 139, 548, 554, 631, 
+              1883, 3389, 5000, 5357, 7000, 
+              8008, 8009, 8080, 9100
+        };
+        
         try {
             List<Future<String>> futures = new ArrayList<>();
 
