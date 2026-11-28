@@ -71,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
 			resultsText.setText("Scanning " + target + "..\n\n");
 			
 			executor.execute(() -> {
-				List<LocalNetMonitor.PortResult> results = LocalNetMonitor.scanCommonTCPPorts(target);
+				List<PortScanner.PortResult> results = PortScanner.scanCommonTCPPorts(target);
 				
 				runOnUiThread(() -> {
-					for(LocalNetMonitor.PortResult result : results) {
+					for(PortScanner.PortResult result : results) {
 						resultsText.append(result + "\n");
 					}
 				});
